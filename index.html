@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=utf-8 />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui' />
+    <title>Leaflet Side-by-side</title>
+    <script src='http://cdn.leafletjs.com/leaflet/v1.3.1/leaflet.js'></script>
+    <script src="leaflet-side-by-side.js"></script>
+    <link href='http://cdn.leafletjs.com/leaflet/v1.3.1/leaflet.css' rel='stylesheet' />
+    <style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
+    </style>
+</head>
+
+<body>
+    <div id='map'></div>
+
+    <script>
+	
+	// Set max bounds for the map to keep us focussed on the area of interest
+    var southWest = L.latLng(5.08, -62.522),
+        northEast = L.latLng(5.115, -62.462),
+        bounds = L.latLngBounds(southWest, northEast);
+		
+    var map = L.map('map', {
+        attributionControl: false,
+        maxBounds: bounds,
+        maxZoom: 17,
+        minZoom: 15
+    }).setView([5.09, -62.49], 13);
+	
+	var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+	}).addTo(map);
+
+   var Esri_WorldTopoMap = L.tileLayer('https://api.mapbox.com/styles/v1/alspeed09/cjpqyk6cx2blz2qo4o82yapba/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxzcGVlZDA5IiwiYSI6ImNqcHFkMnF1ZDB5MGY0OXQyd2ZkYmxqaWEifQ.-6nqleI1E8b9X_tv_E7fXw').addTo(map)
+	
+	/*var imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/b/b8/Ethiopia_relief_location_map.jpg',
+    // This is the trickiest part - you'll need accurate coordinates for the
+    // corners of the image. You can find and create appropriate values at
+    // http://maps.nypl.org/warper/ or
+    // http://www.georeferencer.org/
+    imageBounds = L.latLngBounds([
+        [5.08, -62.52],
+        [5.11, -62.46]]);
+	
+	var overlay = L.imageOverlay(imageUrl, imageBounds)
+    .addTo(map);*/
+
+    L.control.sideBySide(Esri_WorldImagery, Esri_WorldTopoMap).addTo(map);
+    </script>
+</body>
+</html>
